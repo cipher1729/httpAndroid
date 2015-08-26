@@ -7,30 +7,43 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.util.EntityUtils;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URL;
 
 /**
  * Created by cipher1729 on 8/26/2015.
  */
 public class HttpManager {
 
-   public static String getData(String uri)
-   {
-       AndroidHttpClient client = AndroidHttpClient.newInstance("AndroidAgent");
-       HttpGet request = new HttpGet(uri);
-       HttpResponse httpResponse;
-
+   public static String getData(String uri) {
        try {
-           httpResponse = client.execute(request);
-           return
-                   EntityUtils.toString(httpResponse.getEntity());
-       } catch (IOException e) {
+           URL url = new URL(uri);
+           HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
+           StringBuilder sb = new StringBuilder();
+           BufferedReader reader;
+           reader= new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
+
+           while(reader.readLine()!= null)
+           {
+               sb.append(reader.readLine()+ "\n");
+           }
+           reader.close();
+           return sb.toString();
+       } catch (MalformedURLException e) {
            e.printStackTrace();
            return null;
+       } catch (IOException e) {
+           e.printStackTrace();
+            return null;
        }
        finally {
-           client.close();
+
        }
+
    }
 }
