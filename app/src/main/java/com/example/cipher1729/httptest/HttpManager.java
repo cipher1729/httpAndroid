@@ -27,10 +27,12 @@ public class HttpManager {
            StringBuilder sb = new StringBuilder();
            BufferedReader reader;
            reader= new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
-
-           while(reader.readLine()!= null)
+           String line = reader.readLine();
+           line= reader.readLine();
+           while(line!= null)
            {
-               sb.append(reader.readLine()+ "\n");
+               sb.append(line+ "\n");
+               line=reader.readLine();
            }
            reader.close();
            return sb.toString();

@@ -26,6 +26,7 @@ public class MainActivity extends ActionBarActivity {
     TextView tv;
     ProgressBar pb;
     List<myBackgroundTask> lists;
+    List<flowers> flowersList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +61,7 @@ public class MainActivity extends ActionBarActivity {
         }
         if(id==R.id.do_task)
         {if(isOnline())
-            requestTask("http://www.w3schools.com/xml/note.xml");
+            requestTask("http://services.hanselandpetal.com/feeds/flowers.xml");
             else
             Toast.makeText(this,"Not online sorry :(",Toast.LENGTH_LONG).show();
         }
@@ -74,9 +75,14 @@ public class MainActivity extends ActionBarActivity {
         task.execute(uri);
     }
 
-    void updateDisplay(String text)
+    void updateDisplay()
     {
-        tv.append(text+"\n");
+        if(flowersList!=null)
+        {
+            for(flowers f : flowersList)
+                tv.append(f.getName()+"\n");
+        }
+
     }
 
     private class myBackgroundTask extends AsyncTask<String,String, String>
@@ -84,7 +90,7 @@ public class MainActivity extends ActionBarActivity {
         @Override
         protected void onPreExecute()
         {
-            updateDisplay("Starting");
+
             if(lists.size()==0)
             pb.setVisibility(View.VISIBLE);
             lists.add(this);
@@ -99,8 +105,10 @@ public class MainActivity extends ActionBarActivity {
 
         @Override
         protected void onPostExecute(String result)
-        {   lists.remove(this);
-            updateDisplay(result);
+        {
+            flowersList= FlowerXMLParser.parse(result);
+            lists.remove(this);
+            updateDisplay();
             if(lists.size()==0)
             pb.setVisibility(View.INVISIBLE);
         }
@@ -108,7 +116,7 @@ public class MainActivity extends ActionBarActivity {
         @Override
         protected void onProgressUpdate(String... values)
         {
-            updateDisplay(values[0]);
+          //  updateDisplay(values[0]);
         }
     }
 
