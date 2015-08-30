@@ -28,7 +28,7 @@ public class HttpManager {
            BufferedReader reader;
            reader= new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
            String line = reader.readLine();
-           line= reader.readLine();
+          // line= reader.readLine();
            while(line!= null)
            {
                sb.append(line+ "\n");

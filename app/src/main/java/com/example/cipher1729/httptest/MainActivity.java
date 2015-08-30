@@ -61,7 +61,7 @@ public class MainActivity extends ActionBarActivity {
         }
         if(id==R.id.do_task)
         {if(isOnline())
-            requestTask("http://services.hanselandpetal.com/feeds/flowers.xml");
+            requestTask("http://services.hanselandpetal.com/feeds/flowers.json");
             else
             Toast.makeText(this,"Not online sorry :(",Toast.LENGTH_LONG).show();
         }
@@ -106,7 +106,7 @@ public class MainActivity extends ActionBarActivity {
         @Override
         protected void onPostExecute(String result)
         {
-            flowersList= FlowerXMLParser.parse(result);
+            flowersList= FlowerJSONParser.parse(result);
             lists.remove(this);
             updateDisplay();
             if(lists.size()==0)
